@@ -1,0 +1,636 @@
+CSS – Cascading Style Sheets
+----------------------------
+
+This is a very short introduction to the basics of CSS and some of the new features available in CSS3. 
+For more information, please take a look at the references and links at the end of this section.
+
+A Bit of History
+~~~~~~~~~~~~~~~~
+
+Developed in 1996 by the W3C, CSS was designed to separate style from content. By moving information such as layout, 
+position color and fonts to an outside document, accessibility and readability of an HTML can be greatly improved. 
+
+Solely CSS based designs first became possible with the introduction of Internet Explorer 5 and later 
+Firefox and Webkit browsers. These gradually replaced earlier table based designs and paved the way for 
+more versatile and flexible layouts, such as those required by modern mobile and desktop sites. However, 
+inconsistencies and bugs between browsers, especially Internet Explorer, made learning CSS somewhat daunting. 
+
+Fastforword to 2012 and IE6 is (mostly) a distant memory, IE8 has good support for CSS 2.1, IE9 support 
+for CSS3 and the upcoming IE10 hopes to compete with Webkit and Mozilla for who can implement the best W3C 
+standards support. This finally makes all the design goodness of CSS3 available for daily use, as long as 
+logical fallbacks are provided for older browsers. 
+
+Basic Selectors
+~~~~~~~~~~~~~~~
+
+CSS, in its simplest form merely a selector and one or more attributes. Selectors can one of three things, 
+a class name, an element id, or a tag name. The power fo these selectors begins to emerge when you combine 
+these three things to pinpoint the elements you wish to style.
+
+So to select an ID, you can simply write this:
+
+[source,css]
+--------------------------------------------
+
+  #content { 
+    margin: 10px;
+    backround: #eeeee;
+  }
+
+--------------------------------------------
+
+Classes and tag names work similarly:
+
+[source,css]
+--------------------------------------------
+
+  .article {  margin: 10px; }
+  
+  p {  margin: 0 0 18px 0; }
+
+--------------------------------------------
+
+And combining works just as you would suspect. This selector below will change the P elements
+within the #content div to have no margin.
+
+[source,css]
+--------------------------------------------
+
+  #content .article p {  margin: 0 0 0 0; }
+
+--------------------------------------------
+
+
+Inheritance and Specificity
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+When you set a property on an element, any of the children elements will inherit that property. This 
+is the "cascading" part of Cascading Style Sheets. With simple selectors, it is easy to see 
+how this will work.
+
+In the example below, if the #content element has a background-color of '#eeeeee', then any element within 
+it will have the same color.
+
+[source,css]
+--------------------------------------------
+  #content { color: #eeeeee; }
+  .article { color: #ff0000; }
+--------------------------------------------
+
+So what happens if an element has two competing selectors? Is there an easy way to tell which will win out?
+Using the above rules, what color will the P element have?
+
+[source,html]
+--------------------------------------------
+  <section id="content">
+    <article class="article">
+      <p>
+        Do you see any Teletubbies in here? Do you see a slender plastic tag 
+        clipped to my shirt with my name printed on it? 
+      </p>
+    </article>"
+  </section>
+--------------------------------------------
+
+In turns out there an easy way to determine which selectors will be used. This is called the specificity of an item.
+and is calculated as follows:
+
+inline styles, number of ID selectors, number of class selectors, number of element selectors.
+
+So the above example will produce a p with the color of it's parent #content, as IDs outweigh classes. 
+
+One thing to remember, a selector with an ID will override all but inline styles. This is one of the reasons to use IDs
+sparingly, if at all. More on that later. 
+
+
+
+[source,css]
+--------------------------------------------
+
+  p { color: #fff; } 0,0,0,1
+  
+  .article { color: #98c7d4; } 0,0,1,0
+  
+  #content { color: #444245; } 0,1,0,0
+  
+  <h1 style="color: #ff0000;">Headline</h1> 1,0,0,0
+  
+  p { color: #fff; !important; } Always wins
+
+--------------------------------------------
+
+Floats
+~~~~~~
+
+According to the W3C:
+
+"A float is a box that is shifted to the left or right on the current line. 
+The most interesting characteristic of a float (or 'floated' or 'floating' box) 
+is that content may flow along its side (or be prohibited from doing so by the 
+“clear” property). Content flows down the right side of a left-floated box and 
+down the left side of a right-floated box."
+
+Floats can have one of four values, right, left, inherit, none. When assigned right or left, the
+floated element moves to the declared side and wraps any content around it. Originally 
+meant for embedded content, such as photos, it has been widely adapted and abused to 
+created complicated and multi-column layouts. 
+
+When floating a element, the parent element's height is not adjusted to match. This can lead interesting 
+
+
+Multiple Column Layouts using floats
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Here is an example of a 2 column layout using floats, with a header at the top and a footer on the 
+bottom. The content floats to the left, the navigation to the right. Because the footer contains the 
+clear: both declaration, the footer will take its place below the longest of the two floated elements.
+If we did not clear the floats, the footer would move to just after the longest content, destoying the layout
+
+[source,css]
+--------------------------------------------
+
+#container {
+  width: 960px;
+  margin: 0 auto;
+}
+
+#content {
+  float: left;
+  width: 660px;
+  background: #fff;
+}
+
+#navigation {
+  float: right;
+  width: 300px;
+  background: #eee;
+}
+
+#footer {
+  clear: both;
+  background: #aaa;
+  padding: 10px;
+}
+
+--------------------------------------------
+
+Clearing Floats
+~~~~~~~~~~~~~~~
+
+In the two column example you can see how using clear: both clears the float and moves the next element into the proper 
+place. But there are times where is it not practical to manually clear a float, or where you can not insert an 
+element to clear it for you. How do you clear a float without adding any extra HTML?
+
+The answer is a little tricky. Using the code below, you can simply assign the class clearfix to and parent element 
+and its floated children will be automatically cleared. It is a very clever bit of css, which inserts a bit of content 
+after the element, assigns it the clear: both, then hides it. Generally, I include this class (or using a preprocessor, a 
+mixin, more on that later) in every project and use it to automatically clear floats. 
+
+[source,css]
+--------------------------------------------
+
+.clearfix:after {
+  content: ".";
+  display: block;
+  clear: both;
+  visibility: hidden;
+  line-height: 0;
+  height: 0;
+}
+ 
+.clearfix {
+  display: inline-block;
+}
+--------------------------------------------
+
+
+Box Model
+~~~~~~~~~
+
+As you can see in the diagram below, each element is surrounded by a virtual box. This box has a series
+of attributes that effect its border, distance to the content and distance to any neighboring elements.
+
+image::boxmodel.png[Box Model]
+
+The total width of an element is dependent on the total of the padding, border, and width of the object.
+So in the example below, the element would actually have a total width of 442px, not 420px. 
+
+[source,css]
+--------------------------------------------
+
+.box {
+  width: 420px;
+  margin: 0;
+  padding: 10px;
+  border: 2px solid black
+}
+
+--------------------------------------------
+
+Now, with the advent of CSS3, some browsers support the more intuitive box model Microsoft introduced with
+IE5.5 and still supports in "Quirks Mode". In this model, using the 'box-sizing: border-box'
+declaration, the total width is now 420px. While I personally find this model easier to understand, 
+I have been using the official W3C for many years and instinctly calculate the total width. But choices are good
+and I welcome the chance to use it when the need arises. 
+
+Positioning
+absolute vs relative vs static
+http://www.alistapart.com/articles/css-positioning-101/
+
+
+Naming
+~~~~~~
+
+Just as with HTML, care should be taken when writing CSS selectors. You should should avoid using 
+specific attributes of what you are trying to build, for instance:
+
+[source,css]
+--------------------------------------------
+
+  button.blue { background-color: blue; }
+  
+--------------------------------------------
+
+Rather describe the purpose of the element, so that if the designer decides that primary buttons 
+all need to be red, we can easily update our css with touching the html.
+
+[source,css]
+--------------------------------------------
+
+  button.primary { background-color: red; }
+  
+--------------------------------------------
+
+
+Reset Files
+~~~~~~~~~~~
+
+In 2007 Eric Meyer, one of the original pioneers of CSS, proposed removed the default styles of all 
+browsers to create a common baseline with which to start new projects. This way, sites first buid
+with Webkit would not be changed by the defaults setting of Internet Explorer or Opera. 
+
+There are a few things you need to remember when using such a reset. Bold, italic styles are now rendered 
+without any style. You will need to manually define these. The same is true of headers, they are all now 
+the standard font size. But this is a small price to pay for having a clean slate with which to start a 
+new project, one that will render the same in all browsers. 
+
+[source,css]
+--------------------------------------------
+  html, body, div, span, applet, object, iframe,
+  h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+  a, abbr, acronym, address, big, cite, code,
+  del, dfn, em, font, img, ins, kbd, q, s, samp,
+  small, strike, strong, sub, sup, tt, var,
+  dl, dt, dd, ol, ul, li,
+  fieldset, form, label, legend,
+  table, caption, tbody, tfoot, thead, tr, th, td {
+  	margin: 0;
+  	padding: 0;
+  	border: 0;
+  	outline: 0;
+  	font-weight: inherit;
+  	font-style: inherit;
+  	font-size: 100%;
+  	font-family: inherit;
+  	vertical-align: baseline;
+  }
+  /* remember to define focus styles! */
+  :focus {
+  	outline: 0;
+  }
+  body {
+  	line-height: 1;
+  	color: black;
+  	background: white;
+  }
+  ol, ul {
+  	list-style: none;
+  }
+  /* tables still need 'cellspacing="0"' in the markup */
+  table {
+  	border-collapse: separate;
+  	border-spacing: 0;
+  }
+  caption, th, td {
+  	text-align: left;
+  	font-weight: normal;
+  }
+  blockquote:before, blockquote:after,
+  q:before, q:after {
+  	content: "";
+  }
+  blockquote, q {
+  	quotes: "" "";
+  }
+--------------------------------------------
+
+
+Display Types
+~~~~~~~~~~~~~
+
+[source,html]
+--------------------------------------------
+  display: none / block / inline / inline-block
+--------------------------------------------
+
+Block elements:
+- Stretch the full width of their container
+- Behave as though there is a line break before and after the element 
+- Full box model can be manipulated
+
+Tags that are block-level by default: <div>, <p>, <ul>, <ol>, <li> and <h1> through<h6>.
+￼
+Inline elements: 
+- Typically found within block-level elements
+- Only take up the space of the content inside
+- Do not generate a line break before and after the content
+
+Tags that are inline by default include <span>, <a>, <em>, <img>,and <strong>.
+
+Inline-block
+- Same flow as an inline element but behave as a block element
+
+
+Organizing your code
+~~~~~~~~~~~~~~~~~~~~
+
+One of the biggest problems in maintaining a large application or website is organizing the code. This is just as true 
+of CSS as Ruby, PHP or Java. There are a few simple strategies that can greatly enhance your CSS and make maintaining 
+and expanding you code much easier.
+
+
+Table of Contents and Definitions
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The simplest way to organize your code is to begin with a table of contents. This lets anyone working on the document
+see what each section does and where things bleong. Another thing that should be defined at the top of the document
+are all standard colors and font values, so that we a new element is added, the required properties can easily be found. 
+
+
+Divide and conquer
+~~~~~~~~~~~~~~~~~~
+
+"Write many, highly specialized CSS files", Mike West
+
+Another more complex method of organizing your code is to divide each section in a small file, targeting a specific area within your
+code. For instance, I always include a file called "forms", which contains the base styles for my input fields, buttons
+checkboxes and any other elements related to forms in my application or website. 
+
+This gives you a clear structure and makes maintaining a large complicated CSS file much easier. When you later need to 
+adjust or add styles, you know exactly where to put them. If you have only a single large file, then what usually happens is 
+that new code simply ends up on the bottom.
+
+Of course, the browser should not receive several http requests for your css. You will need to use a CMS or sort sort of CSS 
+preprocessor (such as SASS or LESS) to concat the files and deliver a single, compressed file to the browser. 
+
+
+Don’t use IDs in CSS selectors?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Recently, people have begun to argue that you shouldn't use IDs as selectors in CSS at all. Now, I was taught that 
+an ID is the fastest way, to select an element in the DOM and that is indeed true. But this is also not the way we generally use IDs
+in CSS. While I may select the #home container directly, what I usually end up doing is selecting elements within the home 
+container, like this:
+
+[source,css]
+--------------------------------------------
+  #home a { color: red; text-decoration: underline; }
+--------------------------------------------
+
+What I expect the browser to do, is find #home, then find all the A elements within #home. This is not how is works. 
+Instead, the browser finds all A elements within the document, then checks to see if any of them have #home as a parent. 
+Any speed advantage by using IDs is therefore lost.
+
+Another reasons to avoid or reduce the use of IDs is that they are brittle. IDs are also used as page anchors, allowing internal 
+links to scroll to a specific place, or as hooks for Javascript functions. Tying the same IDs to CSS styles creates a
+very brittle document that can become difficult to maintin. 
+
+While you can use IDs, try to limit their use to specific cases rather than defining major styles with them. This will not only
+make you document easier to maintain, but will allow you to build small resuable classes and modules that can be inserted
+anywhere within the document. 
+
+
+IE and Conditional Comments
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Internet Explorer, especially the older versions such as 6 and 7 have always been special cases. IE6 is riddled with 
+bugs, inconsistencies and more than one rendering mode, depending on the document type. Many designer resort to various
+hacks to hide CSS properties from IE or correct its shortcomings and idiosyncracies. 
+
+But Microsoft did one very useful thing when they built Internet Explorer, they added an easy way to show content only to IE 
+or even specific versions of IE. 
+
+[source,html]
+--------------------------------------------
+<!--[if IE 7 ]><link rel="stylesheet" href="/css/ie7.css?v=3"></script><![endif]-->
+--------------------------------------------
+
+This will render a stylesheet that is only visible to IE. You can then blissfully build you site for the latest
+Gecko or Webkit browser and safely correct Internet Explorer with touching the base styles. This still has a few minor 
+drawbacks, but is a much better solution that resorting to complicated hacks and work arounds. 
+
+Another, even more elegant method is to use the same conditional comments to give the html element a class
+based on the browser. This works something like:
+
+[source,html]
+--------------------------------------------
+<!--[if lt IE 7 ]> <html lang="en" class="no-js ie6 home"> <![endif]-->
+<!--[if IE 7 ]>    <html lang="en" class="no-js ie7 home"> <![endif]-->
+<!--[if IE 8 ]>    <html lang="en" class="no-js ie8 home"> <![endif]-->
+<!--[if IE 9 ]>    <html lang="en" class="no-js ie9 home"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <html lang="en" class="no-js home"> <!--<![endif]-->
+--------------------------------------------
+
+In this case, each version of internet explorer receives a class name. You can then easily add special cases
+in the main style sheet by prefacing the selector with the appropriate class. 
+
+
+Vendor Prefixes
+~~~~~~~~~~~~~~~
+
+To eliminate incompatibility and be able to safely introduce new features, 
+browser vendors have begun to use prefixes for CSS3 attributes. Most of these 
+implement a specification from the W3C that is not yet widely supported, 
+such as border-radius, but some vendors use this system to create new features, 
+which are not mentioned at all in the W3C specification. Many of these, such as CSS transitions, 
+have found wider vendor support but use of these features should be treated with some skepticism. 
+
+
+Vendor Abbreviations
+~~~~~~~~~~~~~~~~~~~~
+
+- webikit Safari / Chrome
+- moz Mozilla Firefox
+- ms Microsoft Internet Explorer
+- o Opera (though, as of April, 2012, Opera supports the -webkit prefix)
+
+- border-radius
+- text- / box- shadow
+- rgba / hsla
+- transform
+- transition
+- gradients
+- multiple backgrounds 
+- background resizing
+
+When using prefixes, it is import to include the non prefix version of the feature and well as 
+those from the various vendors:
+
+[source,css]
+--------------------------------------------
+
+.rounded-corners { 
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+}
+
+--------------------------------------------
+
+Preprocessors
+~~~~~~~~~~~~~
+Looking at the code above, you could be forgiven for not wanted to write 3 (or more) declarations 
+for each css selector. Many developers have started using only the -webkit prefixes, but of 
+course this leaves out Mozilla and IE9, both of which have wide support for many CSS3 properties. 
+
+A better solution is to create a general class, say .rounded-corners and use that whenever you 
+need rounded corners. This is still not perfect, because now you need to add that class to each 
+html element that requires those beautiful corners.
+
+What if you could simply write a "mixin", a small bit of CSS that could be included in each 
+selector that needed it? So instead of adding the class, .rounded-corners to each HTML element, 
+you could simply add a small snippet of code to each selector, @rounded-corners.
+
+LESS and SCSS allow exactly this. Both are written as valid CSS, but allow the definition 
+of mixins and variables. How many times have you forgotten the Hex number of the form background? 
+With a preprocessing library, you can simply define a variable, $form-background, and 
+call it whenever needed. 
+
+
+Webfonts
+~~~~~~~~
+First proposed for CSS2 and actually implemented by Microsoft since IE5, web fonts are nothing new. But problems 
+with format compatibility and fears of widespread copying and license issues have prevented them from becoming 
+a standard until recently. With the introduction of the WOFF format, basically a protected OTF variant, 
+type foundries have begun to enthusiastically support web fonts. Important foundries such as Font-Font now sell 
+and license Fonts for embedding on webpages. Typekit, a hosting service, was recently acquired by Adobe, 
+promising support from one of the largest vendors of fonts. 
+
+In order to use a web font, first you must declare a font family using the @font-face rule
+
+[source,css]
+--------------------------------------------
+
+  @font-face { 
+    font-family: Ostrich-Sans, 
+    src: url('ostrich-regular-webfont.woff'); 
+  }
+
+  @font-face { 
+    font-family: Ostrich-Sans, 
+    font-weight: bold,
+    src:url('ostrich-bold-webfont.woff'); 
+  }
+
+--------------------------------------------
+
+and then you can call it using font-family:
+
+[source,css]
+--------------------------------------------
+
+  h1 { font-family: Ostrich-Sans; }
+
+--------------------------------------------
+
+Should you need to support multiple formats, you can simply add to the src attribute:
+
+[source,css]
+--------------------------------------------
+
+  @font-face { 
+    font-family: Ostrich-Sans, 
+    src: url('ostrich-regular-webfont.woff'); 
+    src: url('ostrich-regular-webfont.eot') format('eot'), url('ostrich-regular-webfont.ttf') format('ttf');
+  }
+
+--------------------------------------------
+
+http://theleagueofmoveabletype.com
+http://www.fontsquirrel.com
+http://typekit.com/
+http://fontdeck.com/
+
+
+Frameworks
+~~~~~~~~~~
+Just as server side frameworks, such as Ruby on Rails or Django emerged promoting the MVC pattern 
+and various other best practices, browser frameworks for CSS and HTML have also appeared, attempting 
+to standard multi column layouts, typographic rhythm and a more modular approach to CSS. 
+
+Blueprint and 960 / Grid Based Frameworks
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Blueprint http://blueprintcss.org/ was the first of the CSS frameworks and standardized both a 960px 
+multi-column grid and a typographic baseline. It also introduced a wide variety of modules, hoping 
+to ease development times and standard some important best practices. 
+
+Blueprint popularized the multi-column layout, user 12 or more columns to design a web page in a 
+similar manner to that of a newspaper and spawned hundreds of clones. 
+
+
+Bootstrap
+~~~~~~~~~
+
+In 2011, attempting to create a both an internal style guide and framework, Twitter introduced Bootstrap. 
+It includes a column system, just as blueprint, but also includes an extensive list of basic modules, 
+covering tables, lists, forms and various buttons and alerts. Original, only aimed at modern browsers, 
+Bootstrap was eventually extended to provide basic fallbacks for IE7 and 8. While shadows and rounded 
+corners are not rendered, an elegant and usable interface is still maintained. 
+
+Bootstrap is written in LESS, a CSS preparser, allowing a great
+deal of customization and adjustment. Using LESS's variables, one can adjust the base colors, sizes 
+and even number of columns. 
+
+Thanks to this, Bootstrap is widespread and provides and excellent foundation for building a modular 
+and extensible CSS framework. 
+
+You can read more about Bootstrap and some of the authors' motivations here: http://www.alistapart.com/articles/building-twitter-bootstrap/
+
+
+HTML5 Boilerplate
+~~~~~~~~~~~~~~~~~
+
+While not a framework in the same sense as Bootstrap, HTML5 Boilerplate provides a solid starting point for not only HTML, but also
+CSS and JS. It sets up a document with a series of sensible defaults and overrides for various common browsers. 
+
+First of all, it uses IE Conditional Comments to create a class name on the body tag. These comments were introduced by Microsoft
+to tailor content to a specific version of the Internet Explorer browser. Boilerplate uses this to add a class for each specific version, 
+such as: '.ie6' or '.lt-ie8', letting you target a single version, or anything below a specififed version. 
+
+A related Javascript library, Modernizr is also added. This again adds a series of classes to the <hmtl> tag, indicating whether or not
+specific HTML5 and CSS3 fetaures are supported. For instance, Internet Explorer 9, while having some CSS3 does not support CSS Gradients.
+The body tag would then have a .no-gradients class, allowing you to easily define alternative CSS rules for browsers without
+Gradient support.
+
+In the head, Boilerplate also provides a few meta tags, following current best practice and targeting both mobile and desktop browsers.
+The Encoding Type is set in the first 1024 bytes, eliminating an IE bug. The Viewport is set for Android and iPhone browsers and IE
+is instructed to use the latest rendering engine or the Chrome Frame if available. 
+
+You can find more documentation and examples at http://html5boilerplate.com/.
+
+
+References:
+~~~~~~~~~~~
+
+- http://www.quirksmode.org/
+- http://www.alistapart.com/topics/topic/css/
+- http://dabblet.com/ 
+- http://leaverou.github.com/animatable/
+- http://css.coloratum.com/#slategray
+
+- http://html5boilerplate.com/
+
+Matrix of Browser Compatibility HMTL5 / CSS3
+- http://www.findmebyip.com/litmus/
+

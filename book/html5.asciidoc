@@ -1,0 +1,444 @@
+HTML5 Primer
+------------
+
+This short chapter will talk some basic concepts about ((HTML5)), and about
+the impact of some new features of the standard in mobile
+applicationsfootnote:[The contents of this chapter are inspired from the
+excellent book http://www.abookapart.com/products/html5-for-web-designers[HTML5
+for Web Designers] by Jeremy Keith].
+
+We are going to see how the different element of the stardard are brought
+together, how they impact our markup code, and how the new features of the
+standard can be used to build better websites.
+
+A Bit of History
+~~~~~~~~~~~~~~~~
+
+HTML5 was born as a reaction to the direction that the W3C was giving to the
+XHTML 2 standards (note the difference in the names, one with a space, the other
+without). The HTML5 standard, proposed by the WHATWG group, primarily proposed
+by Opera, Mozilla and Apple, was designed with the core principle of
+*simplification* of the whole HTML specification.
+
+Another important element of the HTML5 specification is the strong focus in
+((applications)). Apple and others providers have foreseen, 5 years ago, the
+implications and opportunities provided by a standardized, distributed,
+simplified application development framework, available in every mobile device
+in the planet, and they have pushed forward to offer advanced app development
+possibilities to the standard.
+
+Finally, another important thing to know is that HTML5 is built upon HTML 4.01,
+which guarantees backwards compatibility, but adds lots of additional
+information to the specification, such as:
+
+- Error handling;
+- Required JavaScript APIs;
+- Implementation details;
+- Rendering of HTML5 engines;
+- ... and much, much more.
+
+The HTML5 specification will become in 2012 a "candidate recommendation" at the
+W3C, and actually, that date is just around the corner now. However, all modern
+browsers have been implementing HTML5, so even if HTML5 ist not a standard yet,
+writing your web applications in it, is the right thing to do.
+
+Declarations and Meta Tags
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+For those developers used to the complexities of HTML, HTML5 is a welcome
+simplification. Let's see one by one the biggest difference for markup
+developers.
+
+A Minimal HTML5 Document
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+In its most minimalistic form, an ((empty HTML5 document)) looks like this:
+
+[source,html]
+--------------------------------------------
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>title</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js"></script>
+  </head>
+  <body>
+    <!-- page content -->
+  </body>
+</html>
+--------------------------------------------
+
+Doctype
+^^^^^^^
+
+This is the most visible change. HTML5 documents must start with this,
+über-simple ((DOCTYPE)) declaration:
+
+[source,html]
+---------------
+<!DOCTYPE html>
+---------------
+
+Compare this to the old HTML4 or XHTML doctypes:
+
+
+[source,html]
+---------------
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+---------------
+
+HTML Tag
+^^^^^^^^
+
+Even the simple HTML tag has been simplified. It now only sports a `lang` parameter:
+
+[source,html]
+----------------
+<html lang="en">
+----------------
+
+Compare this to XHTML:
+
+[source,html]
+----------------
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US">
+----------------
+
+
+Charset
+^^^^^^^
+
+Another welcome simplification is the new ((charset meta tag)):
+
+[source,html]
+----------------------
+<meta charset="utf-8">
+----------------------
+
+again, compared with XHTML:
+
+[source,html]
+----------------------
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
+----------------------
+
+JavaScript and Stylesheets
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Finally, `<link>` and `<script>` tags are stripped of their "type" parameter,
+which is not required anymore:
+
+[source,html]
+----------------------------------------
+<link rel="stylesheet" href="style.css">
+<script src="app.js">
+----------------------------------------
+
+As you can see, the word *simplification* has been well understood by the
+designers of HTML5!
+
+Oh, and by the way, you don't need to add a closing `/` to your standalone tags
+anymore; if you want, you can, but pay attention to the fact that HTML5 *is not
+based in XHTML*, but in HTML 4.01.
+
+New and Obsolete Elements
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Many underused (or downright harmful) tags have been rendered obsolete by HTML5:
+`<frame>`, `<frameset>`, `<noframes>`, `<acronym>`, `<font>`, `<big>`,
+`<center>`, `<strike>`. This also includes attributes such as `bgcolor`,
+`cellspacing` and `valign`. Just use CSS for them!
+
+The specification also brings new elements to the HTML family: have you heard
+about `<canvas>`, `<audio>`, `<video>`, `<mark>`, `<time>`, `<meter>`,
+`<progress>`, `<section>`, `<header>` or `<article>`? Well, be prepared, as
+HTML5 will bring a new definition to the word *web semantics*!
+
+Semantic HTML
+~~~~~~~~~~~~~
+
+Now that we have a rich library of new HTML tags, we use them to clean up some typical div soup. 
+This code, while perhaps a bit extreme, shows one of the typical issues with HTML. Replacing the 
+various divs with the respective HTML5 tags and headers gives the document a much better organization
+and meaning. Google likes it better too, as a well structured HTML5 document is much easier to read. 
+
+[source,html]
+----------------------------------------
+<div class="header">
+  <div class="navigation">
+    <ul>
+      <li><a href="#">Scene One</a></li>
+      <li><a href="#">Scene Two</a></li>
+      <li><a href="#">Scene Three</a></li>
+    </ul>
+  </div>
+  
+</div>
+
+<div class="section">
+  <div class="headline">
+    Dogs 
+  </div>
+  <div class="content">
+    Yeah, I like animals better than people sometimes... 
+    Especially dogs. Dogs are the best. Every time you come home, 
+    they act like they haven't seen you in a year.
+  </div>
+</div>
+
+<div class="footer">
+  © 1994 Samuel L. Jackson
+</div>
+----------------------------------------
+
+[source,html]
+----------------------------------------
+<header class="header">
+  <nav class="navigation">
+    <ul>
+      <li><a href="#">Scene One</a></li>
+      <li><a href="#">Scene Two</a></li>
+      <li><a href="#">Scene Three</a></li>
+    </ul>
+  </nav>
+  
+</header>
+
+<section class="section">
+  <h1>
+    Dogs 
+  </h1>
+  <p>
+    Yeah, I like animals better than people sometimes... 
+    Especially dogs. Dogs are the best. Every time you come home, 
+    they act like they haven't seen you in a year.
+  </p>
+</section>
+
+<footer class="footer">
+  © 1994 Samuel L. Jackson
+</footer>
+----------------------------------------
+
+
+
+
+
+
+Geolocation
+~~~~~~~~~~~
+
+One of the new possibilities offered by HTML5 is being able to access the
+((geolocation)) data from within a web application. There is a very simple
+JavaScript API that allows you to do this:
+
+[source]
+-------------------------------------------------------------
+function success(position) { 
+    // Did we get the position correctly?
+    console.log(position.coords.latitude);
+}
+
+function error(error) {
+    switch(error.code) {
+        case error.TIMEOUT:
+            console.log('Timeout');
+            break;
+
+        case error.POSITION_UNAVAILABLE:
+            console.log('Position unavailable');
+            break;
+
+        case error.PERMISSION_DENIED:
+            console.log('Permission denied');
+            break;
+
+        case error.UNKNOWN_ERROR:
+            console.log('Unknown error');
+            break;
+    }
+}
+
+if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(success, error);
+}
+-------------------------------------------------------------
+
+For privacy reasons, the browser will ask the user for the permission to use
+this information. Coupled with the Google Maps API, you can create compelling
+geolocation-enabled application directly from your browser.
+
+
+Client-Side Storage
+~~~~~~~~~~~~~~~~~~~
+
+One of the most exciting new features about HTML5 is the set of new
+specifications that enable ((client-side)) storage options. Currently there are
+two different options available for mobile developers, each with their strengths
+and weaknesses:
+
+1.  Web Storage
+2.  Web SQL Database
+
+The two most common ones are the first two. Web Storage allows you to store
+simple strings:
+
+[source]
+----------------------------------------------------------
+if (localStorage) {
+    // Just append key values to this dictionary!
+    // It's that easy. However only strings are supported!
+    localStorage.someData = "some data here";
+}
+
+if (sessionStorage) {
+    // This data will only persist while the current
+    // browser window is open!
+    sessionStorage.someData = "some data here";
+}
+----------------------------------------------------------
+
+Web SQL Database is a very impressive piece of technology, allowing you to
+create, update and edit items stored in a local SQL database on the client side:
+
+[source]
+----------------------------------------------------------------------------------------
+this.db = openDatabase('geomood', '1.0', 'Geo-Mood Checkins', 8192);
+this.db.transaction(function(tx) {
+    tx.executeSql("create table if not exists " + 
+                  "checkins(id integer primary key asc, time integer, latitude float," +
+                            "longitude float, mood string)",
+                  [],
+                  function() { console.log("done"); }
+  );
+});
+----------------------------------------------------------------------------------------
+
+However, as impressive as this technology is,
+http://www.w3.org/TR/webdatabase/[the W3C Web Application Working Group no
+longer maintains it], and some consider this API as deprecated. The proposed
+replacement is the http://www.w3.org/TR/IndexedDB/[IndexedDB API] which is
+currently http://caniuse.com/indexeddb[not supported in any major mobile
+platform].
+
+Each of these options has the following characteristics:
+
+Storage on the Client Device
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+In practice, "client-side storage" means data is passed to the browser's storage
+API, which saves it on the local device in the same area as it stores other
+user-specific information, e.g. preferences and cache.  Beyond saving data, the
+APIs let you retrieve data, and in some cases, perform searches and batch
+manipulations.
+
+Sandboxed
+^^^^^^^^^
+
+All four storage APIs tie data to a single "origin". e.g. if
+http://abc.example.com saves some data, then the browser will only permit
+http://abc.example.com to access that data in the future. When it comes to
+"origins", the domain must be exactly the same, so http://example.com and
+http://def.example.com are both disqualified. The port must match too, so
+http://abc.example.com:123 also cannot see http://abc.example.com (which
+defaults to port 80), and so must the protocol (http versus https, etc.).
+
+Quotas
+^^^^^^
+
+Browsers impose limits on storage capacity. When your app attempts to exceed
+that limit, the browser will typically show a dialog to let the user confirm the
+increase.
+
+Transactions
+^^^^^^^^^^^^
+
+The two "database" storage formats support transactions. The aim is the same
+reason regular relational databases use transactions: To ensure the integrity of
+the database. Transactions prevent "race conditions", a phenomenon where two
+sequences of operations are applied to the database at the same time, leading to
+results that are both unpredictable and a database whose state is of dubious
+accuracy.
+
+Synchronous and Asynchronous Modes
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Most of the storage formats all support synchronous and asynchronous modes.
+Synchronous mode is blocking, meaning that the storage operation will be
+executed to completion before the next line of Javascript is executed.
+Asynchronous mode will cause the next line of Javascript to be executed
+immediately, with a new thread implicitly created to perform the storage
+operation. The application will be notified when the operation is finished by
+way of a callback function being called, a function which must be specified when
+the call is made.
+
+Rich Media Tags
+~~~~~~~~~~~~~~~
+
+Probably the most hyped feature of HTML5 are the new ((media elements))
+`<canvas>`, `<video>` and `<audio>`. They have been taylored to bring native
+media functionality to the browser _without the need for a plugin_ (which
+usually was Adobe Flash).
+
+Not all is perfect, though, as different browser vendors still do not support
+the same media formats though, and care must be taken to ensure that all
+HTML5-compliant browsers can play the same audio and video.  This usually can be
+done by nesting different formats in the same `<audio>` tag:
+
+[source,html]
+----------------------------
+<audio>
+    <source src="audio.ogg">
+    <source src="audio.mp3">
+</audio>
+----------------------------
+
+To solve these incompatibilities in the case of video, solutions such as
+http://sublimevideo.net/[SublimeVideo], created by the Swiss company Jilion,
+allow web developers to use a cross-browser HTML5 player in their applications.
+
+
+Feature Detection
+~~~~~~~~~~~~~~~~~
+
+HTML5 includes many, many new features. Not all of them are supported on all
+platforms and all browsers. This might make it difficult to determine, what
+capabilities are available to your web application when it is running.
+
+Back in the old days, we used ((browser sniffing)) to determine, what browser
+the user was using, and to tune our apps accordingly. This was problematic at
+best, and could lead to catastrophes when the matching algorithms used to
+determine a browser and its version were to rigid (for example, only taking
+into account the first digit of the version number and failing when the browser
+version jumped from 9 to 10 - because, obviously 9 is greater than 1).
+
+Luckily, there is a better way. Instead of detecting browser versions it is
+much safer to detect the capabilities of a browser. This will automatically
+also include the capabilities of the underlying platform. On a mobile device,
+other capabilities are present, than on a desktop or a laptop PC.
+
+The library http://modernizr.com[Modernizr] abstracts all of this and handles
+feature detection.
+
+Using it, is as simple as loading the modernizr.js library and the querying the
+Modernizr object:
+
+[source,html]
+----------------------------
+<head>
+   <script src="/js/modernizr.com-custom-1.4.js"></script>
+</head>
+----------------------------
+
+
+Conclusion
+~~~~~~~~~~
+
+HTML5 is a breakthrough specification in terms of simplicity, extensibility, and
+focus on applications. I strongly suggest you start using HTML5 documents in all
+your applications, and don't forget to validate them using the excellent
+http://validator.nu/[HTML5 Validator] by Henri Sivonen!
+
