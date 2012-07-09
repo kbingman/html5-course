@@ -25,6 +25,16 @@ aside {
   float: left;
 }
 
+#logo {
+  color: white;
+  -webkit-transition: color 0.3s ease-in;
+}
+
+#logo:hover {
+  color: orange;
+  -webkit-transition: color 0.3s ease-in;
+}
+
 /* ----- Typography-------------------- */
 
 h1 {
@@ -47,12 +57,16 @@ a {
   color: white;
   text-decoration: none;
   border-bottom: 1px dotted white;
+  -webkit-transition: color 0.3s ease-in;
+  -moz-transition: color 0.3s ease-in;
 }
 
 a:hover {
   color: hsla(0, 100%, 100%, 0.72);
   text-decoration: none;
   border-bottom: 1px solid hsla(0, 100%, 100%, 0.72);
+  -webkit-transition: color 0.3s ease-in;
+  -moz-transition: color 0.3s ease-in;
 }
 
 /* ----- Utilities-------------------- */
